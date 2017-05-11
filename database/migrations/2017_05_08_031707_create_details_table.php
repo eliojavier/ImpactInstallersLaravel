@@ -15,9 +15,9 @@ class CreateDetailsTable extends Migration
     {
         Schema::create('details', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('quantity');
-            $table->float('cost');
             $table->string('description');
+            $table->integer('quantity');
+            $table->float('unitary_price');
             $table->integer('bill_id')->unsigned();
             $table->foreign('bill_id')->references('id')->on('bills');
             $table->timestamps();

@@ -8,6 +8,6 @@ class Detail extends Model
 {
     public function bill()
     {
-        return $this.$this->belongsTo('App/Bill');
+        return $this->belongsTo(Bill::class);
     }
 }
