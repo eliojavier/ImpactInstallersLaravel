@@ -63,10 +63,10 @@ $factory->define(App\Assignment::class, function (Faker\Generator $faker) {
 $factory->define(App\Bill::class, function (Faker\Generator $faker) {
 
     return [
-        'number' => $faker->ean8,
+        'bill_number' => $faker->ean8,
         'client_name' => $faker->name,
         'total' => $faker->numberBetween(50,1500),
-        'assigment_id' => $faker->numberBetween(1,50)
+        'assignment_id' => $faker->numberBetween(1,50)
     ];
 });
 
@@ -76,7 +76,8 @@ $factory->define(App\Detail::class, function (Faker\Generator $faker) {
         'description' => $faker->word . $faker->word,
         'quantity' => $faker->numberBetween(1,10),
         'unitary_price' => $faker->numberBetween(20,50),
-        'bill_id' => $faker->numberBetween(1,50)
+        'tax' => 0.06,
+        'bill_id' => $faker->numberBetween(1,50),
     ];
 });
 

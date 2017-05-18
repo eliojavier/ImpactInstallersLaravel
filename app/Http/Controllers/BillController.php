@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Bill;
 use Illuminate\Http\Request;
+use Barryvdh\DomPDF\Facade as PDF;
 
 class BillController extends Controller
 {
@@ -14,10 +15,10 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = Bill::with('details')->get();
+        $bills = Bill::with('details')->paginate(10);
         return response()->json([
             'bills' => $bills,
-        ]);
+        ])->setStatusCode(200, 'ok');
     }
 
     /**
@@ -84,5 +85,12 @@ class BillController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function makeInvoice()
+    {
+        $data = 1;
+        $pdf = PDF::loadView('welcome');
+        return $pdf->download('invoice.pdf');
     }
 }

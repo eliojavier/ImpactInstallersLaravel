@@ -15,11 +15,11 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('number');
+            $table->integer('bill_number');
             $table->string('client_name');
             $table->float('total');
-            $table->integer('assigment_id')->unsigned();
-            $table->foreign('assigment_id')->references('id')->on('assignments');
+            $table->integer('assignment_id')->unsigned();
+            $table->foreign('assignment_id')->references('id')->on('assignments');
             $table->timestamps();
         });
     }

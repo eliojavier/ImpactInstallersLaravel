@@ -20,3 +20,5 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::resource('users', 'UserController');
 Route::resource('bills', 'BillController');
 Route::resource('assignments', 'AssignmentController');
+
+Route::get('make-invoice', 'BillController@makeInvoice');
