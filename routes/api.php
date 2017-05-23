@@ -13,12 +13,23 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+//Auth::routes();
+
+//Route::middleware('auth:api')->get('/user', function (Request $request) {
+//    return $request->user();
+//
+//});
+
+Route::post('users', 'UserController@store');
+
+Route::group(['middleware' => 'auth:api'], function () {
+
+    Route::resource('users', 'UserController', ['except'=>'store']);
+    Route::resource('assignments', 'AssignmentController');
+    Route::resource('bills', 'BillController');
+    Route::get('make-invoice', 'BillController@makeInvoice');
+
 });
 
-Route::resource('users', 'UserController');
-Route::resource('bills', 'BillController');
-Route::resource('assignments', 'AssignmentController');
 
-Route::get('make-invoice', 'BillController@makeInvoice');
+
