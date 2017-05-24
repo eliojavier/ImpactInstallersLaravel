@@ -42,23 +42,6 @@ class UserController extends Controller
      */
     public function store(UserRequest $request)
     {
-//        $validator = Validator::make($request->all(), [
-//            'name' => 'required',
-//            'last_name' => 'required',
-//            'id_document' => 'required',
-//            'email' => 'required',
-//            'address' => 'required',
-//            'phone' => 'required',
-//            'role' => 'required',
-//            'password' => 'required|confirmed',
-//        ]);
-//
-//        if ($validator->fails()) {
-//            return response()->json([
-//                'error' => $validator->messages()
-//            ])->setStatusCode(400);
-//        }
-
         try {
             $user = new User();
 
@@ -66,10 +49,10 @@ class UserController extends Controller
             $user->last_name = $request->last_name;
             $user->id_document = $request->id_document;
             $user->email = $request->email;
-            $user->password = bcrypt($request->password);
+            $user->password = bcrypt(12345);
             $user->address = $request->address;
             $user->phone = $request->phone;
-            $user->role = $request->role;
+            $user->role = "Employee";
 
             $user->save();
 
@@ -125,19 +108,46 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $user->name = $request->name;
-        $user->last_name = $request->last_name;
-        $user->id_document = $request->id_document;
-        $user->email = $request->email;
-        $user->password = bcrypt($request->password);
-        $user->address = $request->address;
-        $user->phone = $request->phone;
-        $user->role = $request->role;
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'last_name' => 'required',
+            'id_document' => 'required',
+            'email' => 'required',
+            'address' => 'required',
+            'phone' => 'required',
+            'password' => 'required|confirmed',
+        ]);
 
-        $user->save();
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->messages()
+            ])->setStatusCode(400);
+        }
+        try {
+            $user->name = $request->name;
+            $user->last_name = $request->last_name;
+            $user->id_document = $request->id_document;
+            $user->email = $request->email;
+            $user->password = bcrypt($request->password);
+            $user->address = $request->address;
+            $user->phone = $request->phone;
+            $user->role = $request->role;
 
-        $user = fractal($user, new UserTransformer());
-        return response()->json($user)->setStatusCode(201);
+            $user->save();
+
+            $user = fractal($user, new UserTransformer());
+            return response()->json($user)->setStatusCode(201);
+        }
+        catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                return response()->json([
+                    'error' => 'Email already registered',
+                ])->setStatusCode(400);
+            }
+            return response()->json([
+                'error' => $e->getMessage(),
+            ])->setStatusCode(500);
+        }
     }
 
     /**

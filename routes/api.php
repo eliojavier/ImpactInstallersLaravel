@@ -22,14 +22,14 @@ use Illuminate\Http\Request;
 
 Route::post('users', 'UserController@store');
 
-Route::group(['middleware' => 'auth:api'], function () {
+//Route::group(['middleware' => 'auth:api'], function () {
 
     Route::resource('users', 'UserController', ['except'=>'store']);
     Route::resource('assignments', 'AssignmentController');
     Route::resource('bills', 'BillController');
     Route::get('make-invoice', 'BillController@makeInvoice');
 
-});
+//});
 
 
 

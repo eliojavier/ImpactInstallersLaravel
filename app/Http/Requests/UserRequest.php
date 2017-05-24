@@ -30,8 +30,6 @@ class UserRequest extends FormRequest
             'email' => 'required',
             'address' => 'required',
             'phone' => 'required',
-            'role' => 'required',
-            'password' => 'required|confirmed',
         ];
     }
 }
