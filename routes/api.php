@@ -26,6 +26,7 @@ Route::post('users', 'UserController@store');
 
     Route::resource('users', 'UserController', ['except'=>'store']);
     Route::resource('assignments', 'AssignmentController');
+    Route::resource('locations', 'LocationController');
     Route::resource('bills', 'BillController');
     Route::get('make-invoice', 'BillController@makeInvoice');
 

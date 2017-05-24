@@ -40,7 +40,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
 $factory->define(App\Location::class, function (Faker\Generator $faker) {
 
     return [
-        'postcode' => $faker->postcode,
+        'postalCode' => $faker->postcode,
         'name' => $faker->firstName,
         'state' => $faker->firstName,
         'city' => $faker->firstName,
@@ -54,7 +54,8 @@ $factory->define(App\Assignment::class, function (Faker\Generator $faker) {
     return [
         'date' => $faker->date('Y-m-d'),
         'time' => $faker->time('H:i:s'),
-        'status' => $faker->randomElement($array = array ('pendiente', 'finalizado', 'cancelado')),
+        'address' => $faker->address,
+        'status' => $faker->randomElement($array = array ('active', 'done', 'canceled')),
         'user_id' => $faker->numberBetween(1,30),
         'location_id' => $faker->numberBetween(1,10)
     ];
