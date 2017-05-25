@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\LocationRequest;
 use App\Location;
 use Illuminate\Http\Request;
 
@@ -36,9 +37,30 @@ class LocationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LocationRequest $request)
     {
-        //
+        try {
+            $location = new Location();
+
+            $location->name = $request->name;
+            $location->state = $request->state;
+            $location->city = $request->city;
+            $location->postalCode = $request->postalCode;
+            $location->lat = $request->lat;
+            $location->lon = $request->long;
+
+            $location->save();
+
+            return response()->json([
+                'code' => '201',
+            ])->setStatusCode(201);
+
+        }
+        catch (QueryException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ])->setStatusCode(500);
+        }
     }
 
     /**
@@ -83,6 +105,8 @@ class LocationController extends Controller
      */
     public function destroy(Location $location)
     {
-        //
+        return response()->json([
+            'deleted' => $location->delete()
+        ])->setStatusCode(200);
     }
 }

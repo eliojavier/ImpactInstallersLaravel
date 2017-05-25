@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Assignment;
+use App\Http\Requests\AssignmentRequest;
 use Illuminate\Http\Request;
 use DB;
 
@@ -42,9 +43,30 @@ class AssignmentController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AssignmentRequest $request)
     {
-        //
+        try {
+            $assignment = new Assignment();
+
+            $assignment->user_id = $request->name;
+            $assignment->date = $request->date;
+            $assignment->time = $request->time;
+            $assignment->location_id = $request->location;
+            $assignment->address = $request->address;
+            $assignment->status = "Active";
+
+            $assignment->save();
+
+            return response()->json([
+                'code' => '201',
+            ])->setStatusCode(201);
+
+        }
+        catch (QueryException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ])->setStatusCode(500);
+        }
     }
 
     /**
@@ -84,11 +106,11 @@ class AssignmentController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  Assignment $assignment
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Assignment $assignment)
     {
-        //
+
     }
 }
