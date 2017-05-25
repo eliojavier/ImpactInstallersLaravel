@@ -17,6 +17,8 @@ class CreateAssignmentsTable extends Migration
             $table->increments('id');
             $table->date('date');
             $table->time('time');
+            $table->string('clientName');
+            $table->string('clientEmail');
             $table->string('address');
             $table->string('status');
             $table->integer('user_id')->unsigned();

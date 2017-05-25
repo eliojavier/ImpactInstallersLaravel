@@ -27,6 +27,8 @@ class AssignmentRequest extends FormRequest
             'name' => 'required',
             'date' => 'required',
             'time' => 'required',
+            'clientName' => 'required',
+            'clientEmail' => 'required',
             'location' => 'required',
             'address' => 'required',
         ];

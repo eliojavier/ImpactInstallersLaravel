@@ -20,7 +20,7 @@ class AssignmentController extends Controller
 //        return response()->json([
 //            'assignments' => $assignments,
 //        ]);
-        $assignments = DB::select("select concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, l.name as location, a.address, a.status
+        $assignments = DB::select("select concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
         from assignments a, users u, locations l where u.id = a.user_id and l.id = a.location_id");
         return response()->json([
             'assignments' => $assignments,
@@ -51,6 +51,8 @@ class AssignmentController extends Controller
             $assignment->user_id = $request->name;
             $assignment->date = $request->date;
             $assignment->time = $request->time;
+            $assignment->clientName = $request->clientName;
+            $assignment->clientEmail = $request->clientEmail;
             $assignment->location_id = $request->location;
             $assignment->address = $request->address;
             $assignment->status = "Active";

@@ -7,6 +7,7 @@ use App\Transformers\UserTransformer;
 use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use League\Fractal;
 
@@ -22,6 +23,22 @@ class UserController extends Controller
         $users = User::all();
         $users = fractal($users, new UserTransformer())->toArray();
         return response()->json($users);
+    }
+
+    public function getAvailableUsers()
+    {
+        $users = DB::select("select u.id, CONCAT(u.name, ' ', u.last_name) AS name 
+                            from users u where u.id NOT IN(
+                                SELECT u.id
+                                FROM users u, assignments a
+                                WHERE     u.id = a.user_id and
+                                        a.status = 'active' and
+                                        a.date = date('2017-05-25') AND 
+                                        a.time >= '10:00:00' AND 
+                                        a.time < ADDTIME('10:00:00', '01:59:00'))");
+        return response()->json([
+            'data' => $users,
+        ]);
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Bill;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\DB;
 
 class BillController extends Controller
 {
@@ -15,10 +16,12 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = Bill::with('details')->paginate(10);
+        $bills = DB::select("select b.bill_number as billNumber, a.clientName, a.clientEmail, b.total
+                            from bills b, assignments a
+                            where a.id = b.assignment_id;");
         return response()->json([
             'bills' => $bills,
-        ])->setStatusCode(200, 'ok');
+            ]);
     }
 
     /**

@@ -54,6 +54,8 @@ $factory->define(App\Assignment::class, function (Faker\Generator $faker) {
     return [
         'date' => $faker->date('Y-m-d'),
         'time' => $faker->time('H:i:s'),
+        'clientName' => $faker->name,
+        'clientEmail' => $faker->email,
         'address' => $faker->address,
         'status' => $faker->randomElement($array = array ('active', 'done', 'canceled')),
         'user_id' => $faker->numberBetween(1,30),
@@ -65,7 +67,6 @@ $factory->define(App\Bill::class, function (Faker\Generator $faker) {
 
     return [
         'bill_number' => $faker->ean8,
-        'client_name' => $faker->name,
         'total' => $faker->numberBetween(50,1500),
         'assignment_id' => $faker->numberBetween(1,50)
     ];
