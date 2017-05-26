@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Support\Facades\Validator;
 use League\Fractal;
 
@@ -25,17 +26,27 @@ class UserController extends Controller
         return response()->json($users);
     }
 
-    public function getAvailableUsers()
+    public function getAvailableUsers($date, $time)
     {
-        $users = DB::select("select u.id, CONCAT(u.name, ' ', u.last_name) AS name 
+//        $users = DB::select("select u.id, CONCAT(u.name, ' ', u.last_name) AS name
+//                            from users u where u.id NOT IN(
+//                                SELECT u.id
+//                                FROM users u, assignments a
+//                                WHERE     u.id = a.user_id and
+//                                        a.status = 'active' and
+//                                        a.date = date('2017-05-25') AND
+//                                        a.time >= '10:00:00' AND
+//                                        a.time < ADDTIME('10:00:00', '01:59:00'))");
+
+        $users = DB::select("select u.id, CONCAT(u.name, ' ', u.last_name) AS name
                             from users u where u.id NOT IN(
                                 SELECT u.id
                                 FROM users u, assignments a
                                 WHERE     u.id = a.user_id and
                                         a.status = 'active' and
-                                        a.date = date('2017-05-25') AND 
-                                        a.time >= '10:00:00' AND 
-                                        a.time < ADDTIME('10:00:00', '01:59:00'))");
+                                        a.date = date('$date') AND
+                                        a.time >= '10:00:00' AND
+                                        a.time < ADDTIME('$time', '01:59:00'))");
         return response()->json([
             'data' => $users,
         ]);
