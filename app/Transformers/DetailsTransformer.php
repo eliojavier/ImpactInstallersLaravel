@@ -18,7 +18,7 @@ class DetailsTransformer extends TransformerAbstract
         return [
             'quantity' => $detail->quantity,
             'description' => $detail->description,
-            'cost' => $detail->unitary_cost
+            'cost' => $detail->unitary_price
         ];
     }
 }
