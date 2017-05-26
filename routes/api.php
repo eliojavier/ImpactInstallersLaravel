@@ -25,6 +25,7 @@ Route::post('users', 'UserController@store');
 //Route::group(['middleware' => 'auth:api'], function () {
     Route::get('users/available', 'UserController@getAvailableUsers');
     Route::put('users/password/{user}', 'UserController@resetPassword');
+    Route::put('assignments/status/{assignment}', 'AssignmentController@updateStatus');
     Route::resource('users', 'UserController', ['except'=>'store']);
     Route::resource('assignments', 'AssignmentController');
     Route::resource('locations', 'LocationController');

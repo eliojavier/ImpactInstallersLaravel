@@ -6,6 +6,7 @@ use App\Assignment;
 use App\Http\Requests\AssignmentRequest;
 use Illuminate\Http\Request;
 use DB;
+use Illuminate\Support\Facades\Validator;
 
 class AssignmentController extends Controller
 {
@@ -20,11 +21,40 @@ class AssignmentController extends Controller
 //        return response()->json([
 //            'assignments' => $assignments,
 //        ]);
-        $assignments = DB::select("select concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
+        $assignments = DB::select("select a.id, concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
         from assignments a, users u, locations l where u.id = a.user_id and l.id = a.location_id");
         return response()->json([
             'assignments' => $assignments,
         ]);
+    }
+
+    /**
+     * @param Request $request
+     * @param Assignment $assignment
+     * @return $this
+     */
+    public function updateStatus(Request $request, Assignment $assignment)
+    {
+        $validator = Validator::make($request->all(), [
+            'status' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->messages()
+            ])->setStatusCode(400);
+        }
+        try {
+            $assignment->status = $request->status;
+            $assignment->update();
+
+            return response()->json($assignment)->setStatusCode(201);
+        }
+        catch (QueryException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ])->setStatusCode(500);
+        }
     }
 
     /**
