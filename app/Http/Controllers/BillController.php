@@ -16,9 +16,10 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = DB::select("select b.bill_number as billNumber, a.clientName, a.clientEmail, b.total
-                            from bills b, assignments a
-                            where a.id = b.assignment_id;");
+        $bills = DB::select("select b.id, b.bill_number as billNumber, a.clientName, a.clientEmail, 
+                                a.date, b.total, d.quantity, d.description, d.unitary_price as cost
+                                from bills b, assignments a, details d
+                                where a.id = b.assignment_id and b.id = d.bill_id;");
         return response()->json([
             'bills' => $bills,
             ]);

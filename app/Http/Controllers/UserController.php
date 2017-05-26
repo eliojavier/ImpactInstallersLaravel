@@ -41,6 +41,8 @@ class UserController extends Controller
         ]);
     }
 
+
+
     /**
      * Show the form for creating a new resource.
      * @return \Illuminate\Http\Response
@@ -49,6 +51,31 @@ class UserController extends Controller
     public function create()
     {
 
+    }
+
+    public function resetPassword(Request $request, User $user)
+    {
+        $validator = Validator::make($request->all(), [
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->messages()
+            ])->setStatusCode(400);
+        }
+        try {
+            $user->password = $request->password;
+            $user->update();
+
+            $user = fractal($user, new UserTransformer());
+            return response()->json($user)->setStatusCode(201);
+        }
+        catch (QueryException $e) {
+            return response()->json([
+                'error' => $e->getMessage(),
+            ])->setStatusCode(500);
+        }
     }
 
     /**
@@ -150,7 +177,7 @@ class UserController extends Controller
             $user->phone = $request->phone;
             $user->role = $request->role;
 
-            $user->save();
+            $user->update();
 
             $user = fractal($user, new UserTransformer());
             return response()->json($user)->setStatusCode(201);
