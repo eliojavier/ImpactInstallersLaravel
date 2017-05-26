@@ -33,7 +33,7 @@ $factory->define(App\User::class, function (Faker\Generator $faker) {
         'password' => bcrypt('123456'),
         'address' => $faker->address,
         'phone' => $faker->e164PhoneNumber,
-        'role' => $faker->randomElement($array = array ('supervisor', 'employee')),
+        'role' => 'Employee'
     ];
 });
 
@@ -41,9 +41,9 @@ $factory->define(App\Location::class, function (Faker\Generator $faker) {
 
     return [
         'postalCode' => $faker->postcode,
-        'name' => $faker->firstName,
-        'state' => $faker->firstName,
-        'city' => $faker->firstName,
+        'name' => $faker->city,
+        'state' => 'Florida',
+        'city' => 'Miami',
         'lat' => ($faker->numberBetween(1,99)) + ($faker->numberBetween(1,99) * 0.01),
         'lon' => ($faker->numberBetween(1,99)) + ($faker->numberBetween(1,99) * 0.2),
     ];

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LocationRequest;
 use App\Location;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class LocationController extends Controller
 {
@@ -71,7 +72,7 @@ class LocationController extends Controller
      */
     public function show(Location $location)
     {
-        //
+        return response()->json($location)->setStatusCode(200);
     }
 
     /**
@@ -94,7 +95,42 @@ class LocationController extends Controller
      */
     public function update(Request $request, Location $location)
     {
-        //
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'state' => 'required',
+            'city' => 'required',
+            'postalCode' => 'required',
+            'lat' => 'required',
+            'long' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->messages()
+            ])->setStatusCode(400);
+        }
+        try {
+            $location->name = $request->name;
+            $location->state = $request->state;
+            $location->city = $request->city;
+            $location->postalCode = $request->postalCode;
+            $location->lat = $request->lat;
+            $location->lon = $request->long;
+
+            $location->update();
+
+            return response()->json($location)->setStatusCode(201);
+        }
+        catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                return response()->json([
+                    'error' => 'Email already registered',
+                ])->setStatusCode(400);
+            }
+            return response()->json([
+                'error' => $e->getMessage(),
+            ])->setStatusCode(500);
+        }
     }
 
     /**
