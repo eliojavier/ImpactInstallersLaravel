@@ -158,8 +158,7 @@ class UserController extends Controller
             'id_document' => 'required',
             'email' => 'required',
             'address' => 'required',
-            'phone' => 'required',
-            'password' => 'required|confirmed',
+            'phone' => 'required'
         ]);
 
         if ($validator->fails()) {
@@ -175,7 +174,6 @@ class UserController extends Controller
             $user->password = bcrypt($request->password);
             $user->address = $request->address;
             $user->phone = $request->phone;
-            $user->role = $request->role;
 
             $user->update();
 
