@@ -3,9 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Bill;
+use App\Transformers\BillTransformer;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Support\Facades\DB;
+use Spatie\Fractal\Fractal;
 
 class BillController extends Controller
 {
@@ -16,13 +18,12 @@ class BillController extends Controller
      */
     public function index()
     {
-        $bills = DB::select("select b.id, b.bill_number as billNumber, a.clientName, a.clientEmail, 
-                                a.date, b.total, d.quantity, d.description, d.unitary_price as cost
-                                from bills b, assignments a, details d
-                                where a.id = b.assignment_id and b.id = d.bill_id;");
-        return response()->json([
-            'bills' => $bills,
-            ]);
+        $bills = Bill::with('details')->with('assignment')->get();
+
+        $bills = fractal($bills, new BillTransformer())
+            ->toArray();
+        
+        return response()->json($bills);
     }
 
     /**
