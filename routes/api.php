@@ -32,6 +32,8 @@ Route::resource('locations', 'LocationController');
 Route::resource('bills', 'BillController');
 Route::get('make-invoice', 'BillController@makeInvoice');
 Route::get('reports/rankingLocations', 'ReportsController@rankingLocations');
+Route::get('reports/rankingInstallers', 'ReportsController@rankingInstallers');
+Route::get('reports/rankingCommissions/{month}/{year}', 'ReportsController@rankingCommissions');
 
 //});
 
