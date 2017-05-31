@@ -34,6 +34,7 @@ Route::get('make-invoice', 'BillController@makeInvoice');
 Route::get('reports/rankingLocations', 'ReportsController@rankingLocations');
 Route::get('reports/rankingInstallers', 'ReportsController@rankingInstallers');
 Route::get('reports/rankingCommissions/{month}/{year}', 'ReportsController@rankingCommissions');
+Route::get('reports/quantityServices/{month}/{year}', 'ReportsController@quantityServices');
 
 //});
 

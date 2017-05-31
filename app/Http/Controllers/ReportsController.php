@@ -44,4 +44,21 @@ class ReportsController extends Controller
             'commissions' => $reports
         ]);
     }
+
+    public function quantityServices($month, $year)
+    {
+        $doors = DB::select("select count(d.id) as quantity from details d, bills b, assignments a
+                            where d.description like '%door%'
+                            and b.id = d.bill_id and a.id = b.assignment_id 
+                            and month(a.date) = '$month' and year (a.date) = '$year';");
+
+        $windows = DB::select("select count(d.id) as quantity from details d, bills b, assignments a
+                            where d.description like '%window%'
+                            and b.id = d.bill_id and a.id = b.assignment_id 
+                            and month(a.date) = '$month' and year (a.date) = '$year';");
+        return response()->json([
+            'doors' => $doors,
+            'windows' => $windows
+        ]);
+    }
 }
