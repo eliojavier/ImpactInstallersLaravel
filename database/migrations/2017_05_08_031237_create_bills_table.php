@@ -15,8 +15,8 @@ class CreateBillsTable extends Migration
     {
         Schema::create('bills', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('bill_number')->unique();
-            $table->float('total');
+            $table->bigInteger('bill_number')->unique();
+            $table->float('total')->nullable();
             $table->integer('assignment_id')->unsigned();
             $table->foreign('assignment_id')->references('id')->on('assignments');
             $table->timestamps();

@@ -78,7 +78,7 @@ $factory->define(App\Detail::class, function (Faker\Generator $faker) {
         'description' => $faker->word . $faker->word,
         'quantity' => $faker->numberBetween(1,10),
         'unitary_price' => $faker->numberBetween(20,50),
-        'tax' => 0.06,
+        'total_item' => $faker->numberBetween(20,50),
         'bill_id' => $faker->numberBetween(1,50),
     ];
 });

@@ -66,7 +66,7 @@ class AssignmentController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param AssignmentRequest|Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(AssignmentRequest $request)
@@ -127,9 +127,10 @@ class AssignmentController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param AssignmentRequest|Request $request
+     * @param Assignment $assignment
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function update(AssignmentRequest $request, Assignment $assignment)
     {

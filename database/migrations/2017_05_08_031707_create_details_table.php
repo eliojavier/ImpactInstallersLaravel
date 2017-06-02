@@ -18,7 +18,7 @@ class CreateDetailsTable extends Migration
             $table->string('description');
             $table->integer('quantity');
             $table->float('unitary_price');
-            $table->float('tax');
+            $table->float('total_item');
             $table->integer('bill_id')->unsigned();
             $table->foreign('bill_id')->references('id')->on('bills');
             $table->timestamps();
