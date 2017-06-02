@@ -17,6 +17,7 @@ class CreateBillsTable extends Migration
             $table->increments('id');
             $table->bigInteger('bill_number')->unique();
             $table->float('total')->nullable();
+            $table->string('file_path')->nullable();
             $table->integer('assignment_id')->unsigned();
             $table->foreign('assignment_id')->references('id')->on('assignments');
             $table->timestamps();
