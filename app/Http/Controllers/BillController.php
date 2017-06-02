@@ -8,8 +8,6 @@ use App\Detail;
 use App\Transformers\BillTransformer;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
-use Illuminate\Support\Facades\DB;
-use Spatie\Fractal\Fractal;
 
 class BillController extends Controller
 {
@@ -94,9 +92,15 @@ class BillController extends Controller
         }
 
         $bill->total = $total;
-        $bill->update();
 
-        return response()->json(true);
+        $bill->file_path = 'invoices/'.$bill->bill_number.'.pdf';
+
+        $pdf = PDF::loadView('invoices.pdf', compact('assignment', 'total'))->setPaper('a4', 'portrait');
+        $pdf->save($bill->file_path);
+        
+        $bill->update();
+        
+        return response()->json(['code' => 200, 'success' => true]);
     }
 
     /**
