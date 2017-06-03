@@ -104,14 +104,19 @@ class BillController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the cified resource.
      *
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Bill $bill)
     {
-        //
+//        $bill = Bill::findOrFail($id)->with('details')->with('assignment')->get();
+
+        $bill = fractal($bill, new BillTransformer())
+            ->toArray();
+
+        return response()->json($bill);
     }
 
     /**
