@@ -154,9 +154,8 @@ class BillController extends Controller
         //
     }
 
-    public function showPdf(Bill $bill)
+    public function showPdf(Request $request, Bill $bill)
     {
-//        return response()->download($bill->file_path, $bill->bill_number);
-        return response()->file($bill->file_path);
+        return $request->user()->id;
     }
 }

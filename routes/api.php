@@ -27,6 +27,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::put('users/password/{user}', 'UserController@resetPassword');
     Route::put('assignments/status/{assignment}', 'AssignmentController@updateStatus');
     Route::get('bills/showPdf/{bill}', 'BillController@showPdf');
+    Route::get('users/token', 'UserController@showUserByToken');
     Route::resource('users', 'UserController', ['except' => 'store']);
     Route::resource('assignments', 'AssignmentController');
     Route::resource('locations', 'LocationController');

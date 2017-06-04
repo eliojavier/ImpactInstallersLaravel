@@ -218,4 +218,10 @@ class UserController extends Controller
             'deleted' => $user->delete()
         ])->setStatusCode(200);
     }
+
+    public function showUserByToken(Request $request)
+    {
+        $user = User::findOrFail($request->user()->id);
+        return response()->json($user)->setStatusCode(200);
+    }
 }
