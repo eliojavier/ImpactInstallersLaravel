@@ -104,7 +104,7 @@ class UserController extends Controller
             $user->last_name = $request->last_name;
             $user->id_document = $request->id_document;
             $user->email = $request->email;
-            $user->password = bcrypt(12345);
+            $user->password = bcrypt(123456);
             $user->address = $request->address;
             $user->phone = $request->phone;
             $user->role = "Employee";

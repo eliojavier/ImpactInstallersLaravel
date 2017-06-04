@@ -138,9 +138,64 @@ class BillController extends Controller
      * @param  int $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Bill $bill)
     {
-        //
+//        //obtenemos asignacion
+//        $assignment = Assignment::findOrFail($request->assignment_id);
+//
+//        //creamos variable tipo Bill
+//        $bill = new Bill();
+
+        foreach ($request->bill as $k => $v) {
+            if ($k == 'bill_number') {
+                $bill->bill_number = $v;
+                $bill->update();
+                break;
+            }
+        }
+
+        $details = [];
+        foreach ($request->bill as $k => $v) {
+            if ($k == 'details') {
+                $details = (array)$v;
+                break;
+            }
+        }
+
+        foreach ($details as $item) {
+            $detail = new Detail();
+
+            foreach ($item as $key => $value) {
+                if ($key == 'description') {
+                    $detail->description = $value;
+                }
+                if ($key == 'quantity') {
+                    $detail->quantity = $value;
+                }
+                if ($key == 'unitary_cost') {
+                    $detail->unitary_price = $value;
+                }
+            }
+            $detail->total_item = $detail->quantity * $detail->unitary_price;
+            $detail->bill()->associate($bill);
+            $detail->update();
+        }
+
+        $total = 0;
+        foreach ($bill->details as $detail) {
+            $total += $detail->total_item;
+        }
+
+        $bill->total = $total;
+
+        $bill->file_path = 'invoices/'.$bill->bill_number.'.pdf';
+
+        $pdf = PDF::loadView('invoices.pdf', compact('assignment', 'total'))->setPaper('a4', 'portrait');
+        $pdf->save($bill->file_path);
+
+        $bill->update();
+
+        return response()->json(['code' => 200, 'success' => true]);
     }
 
     /**
