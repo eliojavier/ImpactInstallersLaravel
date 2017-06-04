@@ -222,6 +222,8 @@ class UserController extends Controller
     public function showUserByToken(Request $request)
     {
         $user = User::findOrFail($request->user()->id);
+
+        $user = fractal($user, new UserTransformer());
         return response()->json($user)->setStatusCode(200);
     }
 }

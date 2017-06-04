@@ -37,8 +37,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('reports/rankingInstallers', 'ReportsController@rankingInstallers');
     Route::get('reports/rankingCommissions/{month}/{year}', 'ReportsController@rankingCommissions');
     Route::get('reports/quantityServices/{month}/{year}', 'ReportsController@quantityServices');
-
-
 });
 
 
