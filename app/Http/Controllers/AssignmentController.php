@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Assignment;
 use App\Http\Requests\AssignmentRequest;
+use App\User;
 use Illuminate\Http\Request;
 use DB;
 use Illuminate\Support\Facades\Validator;
@@ -13,15 +14,35 @@ class AssignmentController extends Controller
     /**
      * Display a listing of the resource.
      *
+     * @param Request $request
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $assignments = DB::select("select a.id, concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
-        from assignments a, users u, locations l where u.id = a.user_id and l.id = a.location_id");
+        $user = User::findOrFail($request->user()->id);
+
+        if ($user->role == 'Supervisor'){
+            $assignments = DB::select("select a.id, concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
+            from assignments a, users u, locations l where u.id = a.user_id and l.id = a.location_id");
+
+            return response()->json([
+                'assignments' => $assignments,
+            ]);
+        }
+
+        if ($user->role == 'Employee'){
+            $assignments = DB::select("select a.id, concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
+            from assignments a, users u, locations l where u.id = a.user_id and l.id = a.location_id and u.id=$user->id");
+
+            return response()->json([
+                'assignments' => $assignments,
+            ]);
+        }
+
         return response()->json([
-            'assignments' => $assignments,
+            'assignments' => null,
         ]);
+
     }
 
     /**
