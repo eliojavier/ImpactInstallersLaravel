@@ -153,10 +153,8 @@ class BillController extends Controller
         //
     }
 
-    public function makeInvoice()
+    public function showPdf(Bill $bill)
     {
-        $data = 1;
-        $pdf = PDF::loadView('welcome');
-        return $pdf->download('invoice.pdf');
+        return response()->download($bill->file_path);
     }
 }

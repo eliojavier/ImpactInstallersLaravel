@@ -26,6 +26,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('users/available/{date}/{time}', 'UserController@getAvailableUsers');
     Route::put('users/password/{user}', 'UserController@resetPassword');
     Route::put('assignments/status/{assignment}', 'AssignmentController@updateStatus');
+    Route::get('bills/showPdf/{bill}', 'BillController@showPdf');
     Route::resource('users', 'UserController', ['except' => 'store']);
     Route::resource('assignments', 'AssignmentController');
     Route::resource('locations', 'LocationController');
@@ -35,6 +36,7 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('reports/rankingInstallers', 'ReportsController@rankingInstallers');
     Route::get('reports/rankingCommissions/{month}/{year}', 'ReportsController@rankingCommissions');
     Route::get('reports/quantityServices/{month}/{year}', 'ReportsController@quantityServices');
+
 
 });
 
