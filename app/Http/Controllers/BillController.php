@@ -106,8 +106,9 @@ class BillController extends Controller
     /**
      * Display the cified resource.
      *
-     * @param  int $id
+     * @param Bill $bill
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function show(Bill $bill)
     {
@@ -155,6 +156,7 @@ class BillController extends Controller
 
     public function showPdf(Bill $bill)
     {
-        return response()->download($bill->file_path);
+//        return response()->download($bill->file_path, $bill->bill_number);
+        return response()->file($bill->file_path);
     }
 }

@@ -26,7 +26,7 @@ class BillTransformer extends TransformerAbstract
             'clientName' => $bill->assignment->clientName,
             'clientEmail' => $bill->assignment->clientEmail,
             'date' => $bill->assignment->date,
-
+            'pdf' => "http://localhost:8000/" . $bill->file_path
         ];
     }
 
