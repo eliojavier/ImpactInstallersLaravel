@@ -140,11 +140,16 @@ class BillController extends Controller
      */
     public function update(Request $request, Bill $bill)
     {
+//        return response()->json(true);
+//        return response()->json([$bill->id]);
+//        return response()->json(['bill'=> $bill, 'request'=>$request]);
 //        //obtenemos asignacion
 //        $assignment = Assignment::findOrFail($request->assignment_id);
 //
 //        //creamos variable tipo Bill
 //        $bill = new Bill();
+
+        $assignment = $bill->assignment;
 
         foreach ($request->bill as $k => $v) {
             if ($k == 'bill_number') {
@@ -153,6 +158,8 @@ class BillController extends Controller
                 break;
             }
         }
+
+        $bill->details()->delete();
 
         $details = [];
         foreach ($request->bill as $k => $v) {
@@ -178,7 +185,7 @@ class BillController extends Controller
             }
             $detail->total_item = $detail->quantity * $detail->unitary_price;
             $detail->bill()->associate($bill);
-            $detail->update();
+            $detail->save();
         }
 
         $total = 0;

@@ -26,6 +26,16 @@ class UserController extends Controller
         return response()->json($users);
     }
 
+    public function getInstallers()
+    {
+        $users = DB::select("select u.id, CONCAT(u.name, ' ', u.last_name) AS name
+                            from users u where u.role='employee'");
+
+        return response()->json([
+            'data' => $users,
+        ]);
+    }
+
     public function getAvailableUsers($date, $time)
     {
 //        $users = DB::select("select u.id, CONCAT(u.name, ' ', u.last_name) AS name
@@ -44,8 +54,9 @@ class UserController extends Controller
                                 FROM users u, assignments a
                                 WHERE     u.id = a.user_id and
                                         a.status = 'active' and
+                                        u.role = 'employee' and
                                         a.date = date('$date') AND
-                                        a.time >= '10:00:00' AND
+                                        a.time >= '$time' AND
                                         a.time < ADDTIME('$time', '01:59:00'))");
         return response()->json([
             'data' => $users,

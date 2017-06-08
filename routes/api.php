@@ -24,6 +24,7 @@ Route::post('users', 'UserController@store');
 
 Route::group(['middleware' => 'auth:api'], function () {
     Route::get('users/available/{date}/{time}', 'UserController@getAvailableUsers');
+    Route::get('users/installers', 'UserController@getInstallers');
     Route::put('users/password/{user}', 'UserController@resetPassword');
     Route::put('assignments/status/{assignment}', 'AssignmentController@updateStatus');
     Route::get('bills/showPdf/{bill}', 'BillController@showPdf');

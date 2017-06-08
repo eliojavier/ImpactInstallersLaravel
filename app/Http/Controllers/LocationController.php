@@ -122,11 +122,6 @@ class LocationController extends Controller
             return response()->json($location)->setStatusCode(201);
         }
         catch (QueryException $e) {
-            if ($e->getCode() == 23000) {
-                return response()->json([
-                    'error' => 'Email already registered',
-                ])->setStatusCode(400);
-            }
             return response()->json([
                 'error' => $e->getMessage(),
             ])->setStatusCode(500);
