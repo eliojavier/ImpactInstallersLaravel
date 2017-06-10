@@ -21,7 +21,7 @@ class AssignmentController extends Controller
     {
         $user = User::findOrFail($request->user()->id);
 
-        if ($user->role == 'Supervisor'){
+        if ($user->role == 'Supervisor') {
             $assignments = DB::select("select a.id, concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
             from assignments a, users u, locations l where u.id = a.user_id and l.id = a.location_id");
 
@@ -30,7 +30,7 @@ class AssignmentController extends Controller
             ]);
         }
 
-        if ($user->role == 'Employee'){
+        if ($user->role == 'Employee') {
             $assignments = DB::select("select a.id, concat(u.name, \" \", u.last_name) as installerName, a.date, a.time, a.clientName, l.name as location, a.address, a.status
             from assignments a, users u, locations l where u.id = a.user_id and l.id = a.location_id and u.id=$user->id");
 
@@ -66,8 +66,7 @@ class AssignmentController extends Controller
             $assignment->update();
 
             return response()->json($assignment)->setStatusCode(201);
-        }
-        catch (QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json([
                 'error' => $e->getMessage(),
             ])->setStatusCode(500);
@@ -110,8 +109,7 @@ class AssignmentController extends Controller
                 'code' => '201',
             ])->setStatusCode(201);
 
-        }
-        catch (QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json([
                 'error' => $e->getMessage(),
             ])->setStatusCode(500);
@@ -121,7 +119,7 @@ class AssignmentController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function show($id)
@@ -137,7 +135,7 @@ class AssignmentController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int $id
      * @return \Illuminate\Http\Response
      */
     public function edit($id)
@@ -155,6 +153,20 @@ class AssignmentController extends Controller
      */
     public function update(AssignmentRequest $request, Assignment $assignment)
     {
+        if (is_string($request->name) === true) {
+            $searchId = DB::select("select id from users where name = SUBSTRING_INDEX('$request->name', ' ', 1) 
+                                    and last_name = SUBSTRING_INDEX('$request->name', ' ', -1)");
+            $request->name = $searchId;
+            dd($searchId);
+            dd($request->name);
+        }
+
+        if (is_string($request->location) === true) {
+            $searchId = DB::select("select id from locations where name = '$request->location'");
+            $request->location = $searchId;
+            dd($searchId);
+            dd($request->location);
+        }
         try {
             $assignment->user_id = $request->name;
             $assignment->date = $request->date;
@@ -170,8 +182,7 @@ class AssignmentController extends Controller
                 'code' => '201',
             ])->setStatusCode(201);
 
-        }
-        catch (QueryException $e) {
+        } catch (QueryException $e) {
             return response()->json([
                 'error' => $e->getMessage(),
             ])->setStatusCode(500);

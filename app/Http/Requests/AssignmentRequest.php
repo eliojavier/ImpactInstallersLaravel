@@ -24,12 +24,12 @@ class AssignmentRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required',
+//            'name' => 'required',
             'date' => 'required',
             'time' => 'required',
             'clientName' => 'required',
             'clientEmail' => 'required',
-            'location' => 'required',
+//            'location' => 'required',
             'address' => 'required',
         ];
     }
