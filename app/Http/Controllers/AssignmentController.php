@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Assignment;
 use App\Http\Requests\AssignmentRequest;
+use App\Location;
 use App\User;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
-use DB;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class AssignmentController extends Controller
@@ -154,26 +156,30 @@ class AssignmentController extends Controller
     public function update(AssignmentRequest $request, Assignment $assignment)
     {
         if (is_string($request->name) === true) {
-            $searchId = DB::select("select id from users where name = SUBSTRING_INDEX('$request->name', ' ', 1) 
-                                    and last_name = SUBSTRING_INDEX('$request->name', ' ', -1)");
-            $request->name = $searchId;
-            dd($searchId);
-            dd($request->name);
+            $array = explode(" ", $request->name);
+            $name = $array[0];
+            $last_name = $array[1];
+
+            $user = User::whereName($name)->whereLastName($last_name)->first();
+            $assignment->user_id = $user->id;
+        }
+        else {
+            $assignment->user_id = $request->name;
         }
 
         if (is_string($request->location) === true) {
-            $searchId = DB::select("select id from locations where name = '$request->location'");
-            $request->location = $searchId;
-            dd($searchId);
-            dd($request->location);
+            $location = Location::whereName($request->location)->first();
+            $assignment->location_id = $location->id;
         }
+        else{
+            $assignment->location_id = $request->location;
+        }
+        
         try {
-            $assignment->user_id = $request->name;
             $assignment->date = $request->date;
             $assignment->time = $request->time;
             $assignment->clientName = $request->clientName;
             $assignment->clientEmail = $request->clientEmail;
-            $assignment->location_id = $request->location;
             $assignment->address = $request->address;
 
             $assignment->update();
@@ -187,7 +193,6 @@ class AssignmentController extends Controller
                 'error' => $e->getMessage(),
             ])->setStatusCode(500);
         }
-
     }
 
     /**
