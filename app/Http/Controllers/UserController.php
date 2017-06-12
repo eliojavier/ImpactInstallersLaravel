@@ -87,7 +87,7 @@ class UserController extends Controller
             ])->setStatusCode(400);
         }
         try {
-            $user->password = $request->password;
+            $user->password = bcrypt($request->password);
             $user->update();
 
             $user = fractal($user, new UserTransformer());
