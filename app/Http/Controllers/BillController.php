@@ -5,9 +5,11 @@ namespace App\Http\Controllers;
 use App\Assignment;
 use App\Bill;
 use App\Detail;
+use App\Mail\InvoiceMail;
 use App\Transformers\BillTransformer;
 use Illuminate\Http\Request;
 use Barryvdh\DomPDF\Facade as PDF;
+use Illuminate\Support\Facades\Mail;
 
 class BillController extends Controller
 {
@@ -99,6 +101,8 @@ class BillController extends Controller
         $pdf->save($bill->file_path);
         
         $bill->update();
+
+        Mail::send(new InvoiceMail($bill->bill_number, $assignment->user->email));
         
         return response()->json(['code' => 200, 'success' => true]);
     }
@@ -135,8 +139,9 @@ class BillController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request $request
-     * @param  int $id
+     * @param Bill $bill
      * @return \Illuminate\Http\Response
+     * @internal param int $id
      */
     public function update(Request $request, Bill $bill)
     {
@@ -201,6 +206,8 @@ class BillController extends Controller
         $pdf->save($bill->file_path);
 
         $bill->update();
+
+        Mail::send(new InvoiceMail($bill->bill_number, $assignment->user->email));
 
         return response()->json(['code' => 200, 'success' => true]);
     }
