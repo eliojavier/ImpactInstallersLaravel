@@ -49,12 +49,11 @@ class UserController extends Controller
 //                                        a.time < ADDTIME('10:00:00', '01:59:00'))");
 
         $users = DB::select("select u.id, CONCAT(u.name, ' ', u.last_name) AS name
-                            from users u where u.id NOT IN(
+                            from users u where u.role = 'employee' and u.id NOT IN(
                                 SELECT u.id
                                 FROM users u, assignments a
                                 WHERE     u.id = a.user_id and
                                         a.status = 'active' and
-                                        u.role = 'employee' and
                                         a.date = date('$date') AND
                                         a.time >= '$time' AND
                                         a.time < ADDTIME('$time', '01:59:00'))");

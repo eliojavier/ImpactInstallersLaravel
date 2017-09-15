@@ -102,7 +102,7 @@ class BillController extends Controller
         
         $bill->update();
 
-        Mail::send(new InvoiceMail($bill->bill_number, $assignment->user->email));
+        Mail::send(new InvoiceMail($bill->bill_number, $assignment->clientEmail));
         
         return response()->json(['code' => 200, 'success' => true]);
     }
@@ -207,7 +207,7 @@ class BillController extends Controller
 
         $bill->update();
 
-        Mail::send(new InvoiceMail($bill->bill_number, $assignment->user->email));
+        Mail::send(new InvoiceMail($bill->bill_number, $assignment->clientEmail));
 
         return response()->json(['code' => 200, 'success' => true]);
     }
