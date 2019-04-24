@@ -13,11 +13,11 @@ class DatabaseSeeder extends Seeder
     {
         $this->cleanDatabase();
         factory('App\User', 5)->create();
-//        factory('App\Location', 10)->create();
+        factory('App\Location', 10)->create();
 //        factory('App\Assignment', 50)->create();
 //        factory('App\Bill', 50)->create();
 //        factory('App\Detail', 300)->create();
-        // $this->call(UsersTableSeeder::class);
+//         $this->call(UsersTableSeeder::class);
     }
 
     public function cleanDatabase()
